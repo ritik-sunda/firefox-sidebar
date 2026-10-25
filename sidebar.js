@@ -10,13 +10,16 @@ function savePins() {
 function renderPin(pin) {
     const pinLink = document.createElement("a");
     pinLink.textContent = pin.name;
+    pinLink.title = pin.name;
     pinLink.href = pin.url;
     pinLink.className = "pin";
 
     const pinItem = document.createElement("li");
+    pinItem.className = "pin-row";
     const removeButton = document.createElement("button");
     removeButton.textContent = "Remove";
     removeButton.type = "button";
+    removeButton.className = "remove-pin";
 
     removeButton.addEventListener("click", () => {
         const index = pins.findIndex((savedPin) => {

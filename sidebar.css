@@ -64,3 +64,33 @@ section {
   outline: 2px solid #a78bfa;
   outline-offset: 3px;
 }
+.pin-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pin-row .pin {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.remove-pin {
+  flex-shrink: 0;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  color: #a1a1aa;
+  font-family: inherit;
+  cursor: pointer;
+}
+.remove-pin:hover {
+  background-color: #4a2530;
+  color: #fda4af;
+}
+.remove-pin:focus-visible {
+  outline: 2px solid #a78bfa;
+  outline-offset: 2px;
+}
