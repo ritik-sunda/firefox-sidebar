@@ -17,22 +17,27 @@ function renderPin(pin) {
     pinLink.addEventListener("click", async (event) => {
         event.preventDefault();
 
-        const tabs = await browser.tabs.query({
-            currentWindow: true
-        });
-
-        const existingTab = tabs.find((tab) => {
-            return tab.url === pin.url;
-        });
-
-        if (existingTab !== undefined) {
-            await browser.tabs.update(existingTab.id, {
-                active: true
+        try {
+            const tabs = await browser.tabs.query({
+                currentWindow: true
             });
-        } else {
-            await browser.tabs.create({
-                url: pin.url
+
+            const existingTab = tabs.find((tab) => {
+                return tab.url === pin.url;
             });
+
+            if (existingTab !== undefined) {
+                await browser.tabs.update(existingTab.id, {
+                    active: true
+                });
+            } else {
+                await browser.tabs.create({
+                    url: pin.url
+                });
+            }
+        } catch (error) {
+            console.error("Failed to open pin:", error);
+            alert("Could not open this pin. Please try again.");
         }
     });
 
