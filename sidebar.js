@@ -13,9 +13,16 @@ function renderPin(pin) {
     pinLink.title = pin.name;
     pinLink.href = pin.url;
     pinLink.className = "pin";
+    let isOpening = false;
 
     pinLink.addEventListener("click", async (event) => {
         event.preventDefault();
+
+        if (isOpening) {
+            return;
+        }
+
+        isOpening = true;
 
         try {
             const tabs = await browser.tabs.query({
@@ -38,6 +45,8 @@ function renderPin(pin) {
         } catch (error) {
             console.error("Failed to open pin:", error);
             alert("Could not open this pin. Please try again.");
+        } finally {
+            isOpening = false;
         }
     });
 
