@@ -14,6 +14,14 @@ function renderPin(pin) {
     pinLink.href = pin.url;
     pinLink.className = "pin";
 
+    pinLink.addEventListener("click", (event) => {
+  event.preventDefault();
+
+  browser.tabs.create({
+    url: pin.url
+  });
+});
+
     const pinItem = document.createElement("li");
     pinItem.className = "pin-row";
     const removeButton = document.createElement("button");
