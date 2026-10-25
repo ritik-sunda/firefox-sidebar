@@ -70,6 +70,26 @@ function renderPin(pin) {
         );
     }
 
+    async function restoreTabConnection() {
+        try {
+            const tabs = await browser.tabs.query({
+                currentWindow: true
+            });
+
+            const matchingTab = tabs.find((tab) => {
+                return tab.url === pin.url;
+            });
+
+            if (matchingTab !== undefined) {
+                openedTabId = matchingTab.id;
+                updateHighlight(matchingTab.active ? matchingTab.id : null);
+            }
+        } catch (error) {
+            console.error("Failed to restore pin connection:", error);
+        }
+    }
+    restoreTabConnection();
+
     function handleTabActivated(activeInfo) {
         updateHighlight(activeInfo.tabId);
     }
