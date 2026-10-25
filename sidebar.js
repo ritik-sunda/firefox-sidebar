@@ -1,0 +1,105 @@
+const addPinButton = document.querySelector(".add-pin");
+const pinList = document.querySelector("#pin-list");
+const savedPins = localStorage.getItem("pins");
+const pins = savedPins === null ? [] : JSON.parse(savedPins);
+
+function savePins() {
+    localStorage.setItem("pins", JSON.stringify(pins));
+}
+
+function renderPin(pin) {
+    const pinLink = document.createElement("a");
+    pinLink.textContent = pin.name;
+    pinLink.href = pin.url;
+    pinLink.className = "pin";
+
+    const pinItem = document.createElement("li");
+    const removeButton = document.createElement("button");
+    removeButton.textContent = "Remove";
+    removeButton.type = "button";
+
+    removeButton.addEventListener("click", () => {
+        const index = pins.findIndex((savedPin) => {
+            return savedPin.id === pin.id;
+        });
+
+        if (index === -1) {
+            return;
+        }
+
+        pins.splice(index, 1);
+
+        savePins();
+
+        pinItem.remove();
+    });
+
+    pinItem.append(pinLink, removeButton);
+    pinList.append(pinItem);
+}
+
+pins.forEach((pin) => {
+    if (pin.id === undefined) {
+        pin.id = crypto.randomUUID();
+    }
+});
+
+savePins();
+
+pins.forEach(renderPin);
+
+addPinButton.addEventListener("click", () => {
+    const pinName = prompt("Enter a name for your pin:");
+
+    if (pinName === null) {
+        return;
+    }
+
+    const trimmedName = pinName.trim();
+
+    if (trimmedName === "") {
+        alert("Please enter a pin name.");
+        return;
+    }
+
+    const pinUrl = prompt("Enter the website URL:");
+
+    if (pinUrl === null) {
+        return;
+    }
+
+    const trimmedUrl = pinUrl.trim();
+
+    if (trimmedUrl === "") {
+        alert("Please enter a URL.");
+        return;
+    }
+
+    const hasWebPrefix =
+        trimmedUrl.startsWith("https://") ||
+        trimmedUrl.startsWith("http://");
+
+    let finalUrl = trimmedUrl;
+
+    if (!hasWebPrefix) {
+        finalUrl = "https://" + trimmedUrl;
+    }
+
+    try {
+        const parsedUrl = new URL(finalUrl);
+        finalUrl = parsedUrl.href;
+    } catch {
+        alert("Please enter a valid website URL.");
+        return;
+    }
+
+    const pin = {
+        id: crypto.randomUUID(),
+        name: trimmedName,
+        url: finalUrl
+    };
+
+    pins.push(pin);
+    savePins();
+    renderPin(pin);
+});
