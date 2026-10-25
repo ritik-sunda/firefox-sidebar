@@ -14,13 +14,27 @@ function renderPin(pin) {
     pinLink.href = pin.url;
     pinLink.className = "pin";
 
-    pinLink.addEventListener("click", (event) => {
-  event.preventDefault();
+    pinLink.addEventListener("click", async (event) => {
+        event.preventDefault();
 
-  browser.tabs.create({
-    url: pin.url
-  });
-});
+        const tabs = await browser.tabs.query({
+            currentWindow: true
+        });
+
+        const existingTab = tabs.find((tab) => {
+            return tab.url === pin.url;
+        });
+
+        if (existingTab !== undefined) {
+            await browser.tabs.update(existingTab.id, {
+                active: true
+            });
+        } else {
+            await browser.tabs.create({
+                url: pin.url
+            });
+        }
+    });
 
     const pinItem = document.createElement("li");
     pinItem.className = "pin-row";
@@ -44,30 +58,30 @@ function renderPin(pin) {
 
         pinItem.remove();
     });
-const renameButton = document.createElement("button");
-renameButton.textContent = "Rename";
-renameButton.type = "button";
-renameButton.className = "pin-action";
+    const renameButton = document.createElement("button");
+    renameButton.textContent = "Rename";
+    renameButton.type = "button";
+    renameButton.className = "pin-action";
 
-renameButton.addEventListener("click", () => {
-  const newName = prompt("Enter a new pin name:", pin.name);
+    renameButton.addEventListener("click", () => {
+        const newName = prompt("Enter a new pin name:", pin.name);
 
-  if (newName === null) {
-    return;
-  }
+        if (newName === null) {
+            return;
+        }
 
-  const trimmedName = newName.trim();
+        const trimmedName = newName.trim();
 
-  if (trimmedName === "") {
-    alert("Please enter a pin name.");
-    return;
-  }
+        if (trimmedName === "") {
+            alert("Please enter a pin name.");
+            return;
+        }
 
-  pin.name = trimmedName;
-  pinLink.textContent = pin.name;
-  pinLink.title = pin.name;
-  savePins();
-});
+        pin.name = trimmedName;
+        pinLink.textContent = pin.name;
+        pinLink.title = pin.name;
+        savePins();
+    });
     pinItem.append(pinLink, removeButton, renameButton);
     pinList.append(pinItem);
 }

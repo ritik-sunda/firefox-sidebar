@@ -3,6 +3,7 @@
   "name": "My Sidebar",
   "version": "0.1.0",
   "description": "A sidebar for organising persistent website pins.",
+  "permissions": ["tabs"],
   "sidebar_action": {
     "default_title": "My Sidebar",
     "default_panel": "sidebar.html"
