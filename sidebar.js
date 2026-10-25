@@ -8,12 +8,13 @@ function savePins() {
 }
 
 function renderPin(pin) {
+    let isOpening = false;
+    let openedTabId = null;
     const pinLink = document.createElement("a");
     pinLink.textContent = pin.name;
     pinLink.title = pin.name;
     pinLink.href = pin.url;
     pinLink.className = "pin";
-    let isOpening = false;
 
     pinLink.addEventListener("click", async (event) => {
         event.preventDefault();
@@ -29,18 +30,28 @@ function renderPin(pin) {
                 currentWindow: true
             });
 
-            const existingTab = tabs.find((tab) => {
-                return tab.url === pin.url;
+            let existingTab = tabs.find((tab) => {
+                return tab.id === openedTabId;
             });
 
+            if (existingTab === undefined) {
+                existingTab = tabs.find((tab) => {
+                    return tab.url === pin.url;
+                });
+            }
+
             if (existingTab !== undefined) {
+                openedTabId = existingTab.id;
+
                 await browser.tabs.update(existingTab.id, {
                     active: true
                 });
             } else {
-                await browser.tabs.create({
+                const createdTab = await browser.tabs.create({
                     url: pin.url
                 });
+
+                openedTabId = createdTab.id;
             }
         } catch (error) {
             console.error("Failed to open pin:", error);
