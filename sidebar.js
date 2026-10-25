@@ -19,7 +19,7 @@ function renderPin(pin) {
     const removeButton = document.createElement("button");
     removeButton.textContent = "Remove";
     removeButton.type = "button";
-    removeButton.className = "remove-pin";
+    removeButton.className = "pin-action remove-pin";
 
     removeButton.addEventListener("click", () => {
         const index = pins.findIndex((savedPin) => {
@@ -36,8 +36,31 @@ function renderPin(pin) {
 
         pinItem.remove();
     });
+const renameButton = document.createElement("button");
+renameButton.textContent = "Rename";
+renameButton.type = "button";
+renameButton.className = "pin-action";
 
-    pinItem.append(pinLink, removeButton);
+renameButton.addEventListener("click", () => {
+  const newName = prompt("Enter a new pin name:", pin.name);
+
+  if (newName === null) {
+    return;
+  }
+
+  const trimmedName = newName.trim();
+
+  if (trimmedName === "") {
+    alert("Please enter a pin name.");
+    return;
+  }
+
+  pin.name = trimmedName;
+  pinLink.textContent = pin.name;
+  pinLink.title = pin.name;
+  savePins();
+});
+    pinItem.append(pinLink, removeButton, renameButton);
     pinList.append(pinItem);
 }
 

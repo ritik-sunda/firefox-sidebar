@@ -76,7 +76,7 @@ section {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.remove-pin {
+.pin-action {
   flex-shrink: 0;
   padding: 6px 8px;
   border: none;
@@ -86,11 +86,15 @@ section {
   font-family: inherit;
   cursor: pointer;
 }
+.pin-action:hover {
+  background-color: #35394f;
+  color: #f3f4f6;
+}
 .remove-pin:hover {
   background-color: #4a2530;
   color: #fda4af;
 }
-.remove-pin:focus-visible {
+.pin-action:focus-visible {
   outline: 2px solid #a78bfa;
   outline-offset: 2px;
 }
