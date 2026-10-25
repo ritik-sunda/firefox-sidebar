@@ -46,12 +46,14 @@ function renderPin(pin) {
                 await browser.tabs.update(existingTab.id, {
                     active: true
                 });
+                updateHighlight(existingTab.id);
             } else {
                 const createdTab = await browser.tabs.create({
                     url: pin.url
                 });
 
                 openedTabId = createdTab.id;
+                updateHighlight(createdTab.id);
             }
         } catch (error) {
             console.error("Failed to open pin:", error);
@@ -60,6 +62,19 @@ function renderPin(pin) {
             isOpening = false;
         }
     });
+
+    function updateHighlight(activeTabId) {
+        pinLink.classList.toggle(
+            "active",
+            activeTabId === openedTabId
+        );
+    }
+
+    function handleTabActivated(activeInfo) {
+        updateHighlight(activeInfo.tabId);
+    }
+
+    browser.tabs.onActivated.addListener(handleTabActivated);
 
     const pinItem = document.createElement("li");
     pinItem.className = "pin-row";
@@ -78,9 +93,8 @@ function renderPin(pin) {
         }
 
         pins.splice(index, 1);
-
         savePins();
-
+        browser.tabs.onActivated.removeListener(handleTabActivated);
         pinItem.remove();
     });
     const renameButton = document.createElement("button");
