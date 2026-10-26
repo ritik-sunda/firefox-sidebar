@@ -1,6 +1,15 @@
 const addPinButton = document.querySelector(".add-pin");
 const pinList = document.querySelector("#pin-list");
 
+function isValidPin(pin) {
+    return (
+        pin !== null &&
+        typeof pin === "object" &&
+        typeof pin.name === "string" &&
+        typeof pin.url === "string"
+    );
+}
+
 function loadPins() {
     const savedText = localStorage.getItem("pins");
 
@@ -14,7 +23,9 @@ function loadPins() {
         if (!Array.isArray(parsedPins)) {
             throw new Error("Saved pins must be an array.");
         }
-
+        if (!parsedPins.every(isValidPin)) {
+        throw new Error("Saved data contains an invalid pin.");
+        }
         return parsedPins;
     } catch (error) {
         console.error("Could not load saved pins:", error);
