@@ -78,6 +78,10 @@ function renderPin(pin) {
     pinLink.href = pin.url;
     pinLink.className = "pin";
 
+    function updateCloseButton() {
+    closeButton.disabled = openedTabId === null;
+    }
+
     pinLink.addEventListener("click", async (event) => {
         event.preventDefault();
 
@@ -105,6 +109,7 @@ function renderPin(pin) {
 
             if (existingTab !== undefined) {
                 openedTabId = existingTab.id;
+                updateCloseButton();
 
                 await browser.tabs.update(existingTab.id, {
                     active: true
@@ -116,6 +121,7 @@ function renderPin(pin) {
                 });
 
                 openedTabId = createdTab.id;
+                updateCloseButton();
                 updateHighlight(createdTab.id);
             }
         } catch (error) {
@@ -150,6 +156,7 @@ function renderPin(pin) {
 
             if (matchingTab !== undefined) {
                 openedTabId = matchingTab.id;
+                updateCloseButton();
                 updateHighlight(matchingTab.active ? matchingTab.id : null);
             }
         } catch (error) {
@@ -175,6 +182,7 @@ function renderPin(pin) {
         }
 
         openedTabId = null;
+        updateCloseButton();
         pinLink.classList.remove("active");
     }
 
@@ -228,7 +236,27 @@ function renderPin(pin) {
         pinLink.title = pin.name;
         savePins();
     });
-    pinItem.append(pinLink, removeButton, renameButton);
+
+    const closeButton = document.createElement("button");
+closeButton.textContent = "Close tab";
+closeButton.type = "button";
+closeButton.className = "pin-action";
+closeButton.disabled = openedTabId === null;
+
+closeButton.addEventListener("click", async () => {
+    if (openedTabId === null) {
+        return;
+    }
+
+    try {
+        await browser.tabs.remove(openedTabId);
+    } catch (error) {
+        console.error("Could not close tab:", error);
+        alert("Could not close this tab. Please try again.");
+    }
+});
+
+    pinItem.append(pinLink, removeButton, renameButton, closeButton);
     pinList.append(pinItem);
 }
 

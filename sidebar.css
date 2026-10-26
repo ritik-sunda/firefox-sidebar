@@ -98,3 +98,7 @@ section {
   outline: 2px solid #a78bfa;
   outline-offset: 2px;
 }
+.pin-action:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
