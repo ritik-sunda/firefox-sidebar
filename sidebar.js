@@ -1,5 +1,10 @@
 const addPinButton = document.querySelector(".add-pin");
-const pinList = document.querySelector("#pin-list");
+const groups = [
+    { id: "coding", name: "Coding" },
+    { id: "learning", name: "Learning" },
+    { id: "college", name: "College" }
+];
+const groupsContainer = document.querySelector("#groups-container");
 
 document.addEventListener("click", (event) => {
     const openPanels = document.querySelectorAll(".pin-options[open]");
@@ -61,6 +66,20 @@ function loadPins() {
     }
 }
 const pins = loadPins();
+
+function renderGroup(group) {
+    const section = document.createElement("section");
+
+    const heading = document.createElement("h2");
+    heading.className = "group-title";
+    heading.textContent = group.name;
+
+    const list = document.createElement("ul");
+    list.id = "pins-" + group.id;
+
+    section.append(heading, list);
+    groupsContainer.append(section);
+}
 let sidebarWindowId = null;
 
 async function initializeSidebar() {
@@ -68,6 +87,7 @@ async function initializeSidebar() {
         const currentWindow = await browser.windows.getCurrent();
         sidebarWindowId = currentWindow.id;
 
+        groups.forEach(renderGroup);
         pins.forEach(renderPin);
     } catch (error) {
         console.error("Failed to initialize sidebar:", error);
@@ -296,12 +316,17 @@ function renderPin(pin) {
     actions.append(summary, actionsPanel);
 
     pinItem.append(pinLink, closeButton, actions);
-    pinList.append(pinItem);
+    const groupList = document.getElementById("pins-" + pin.groupId);
+groupList.append(pinItem);
 }
 
 pins.forEach((pin) => {
     if (pin.id === undefined) {
         pin.id = crypto.randomUUID();
+    }
+
+    if (pin.groupId === undefined) {
+        pin.groupId = "college";
     }
 });
 
@@ -362,7 +387,8 @@ addPinButton.addEventListener("click", () => {
     const pin = {
         id: crypto.randomUUID(),
         name: trimmedName,
-        url: finalUrl
+        url: finalUrl,
+        groupId: "college"
     };
 
     pins.push(pin);
