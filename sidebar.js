@@ -267,6 +267,20 @@ function renderPin(pin) {
     const actionsPanel = document.createElement("div");
     actionsPanel.className = "pin-options-panel";
 
+    actions.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            event.preventDefault();
+            actions.open = false;
+            summary.focus();
+        }
+    });
+
+    actions.addEventListener("focusout", (event) => {
+        if (!actions.contains(event.relatedTarget)) {
+            actions.open = false;
+        }
+    });
+
     actionsPanel.append(renameButton, removeButton);
     actions.append(summary, actionsPanel);
 
