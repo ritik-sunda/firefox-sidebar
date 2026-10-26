@@ -1,5 +1,18 @@
 const addPinButton = document.querySelector(".add-pin");
 const pinGroupSelect = document.querySelector("#pin-group");
+const themeSelect = document.querySelector("#theme-select");
+const savedTheme = localStorage.getItem("theme");
+const initialTheme = savedTheme === "ocean" ? "ocean" : "default";
+
+document.documentElement.dataset.theme = initialTheme;
+themeSelect.value = initialTheme;
+
+themeSelect.addEventListener("change", () => {
+    const selectedTheme = themeSelect.value;
+
+    document.documentElement.dataset.theme = selectedTheme;
+    localStorage.setItem("theme", selectedTheme);
+});
 const groups = [
     { id: "coding", name: "Coding" },
     { id: "learning", name: "Learning" },
