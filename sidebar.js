@@ -1,7 +1,41 @@
 const addPinButton = document.querySelector(".add-pin");
 const pinList = document.querySelector("#pin-list");
-const savedPins = localStorage.getItem("pins");
-const pins = savedPins === null ? [] : JSON.parse(savedPins);
+
+function loadPins() {
+    const savedText = localStorage.getItem("pins");
+
+    if (savedText === null) {
+        return [];
+    }
+
+    try {
+        const parsedPins = JSON.parse(savedText);
+
+        if (!Array.isArray(parsedPins)) {
+            throw new Error("Saved pins must be an array.");
+        }
+
+        return parsedPins;
+    } catch (error) {
+        console.error("Could not load saved pins:", error);
+        alert("Could not load your pins. Your saved data has been preserved.");
+
+        throw error;
+    }
+}
+const pins = loadPins();
+let sidebarWindowId = null;
+
+async function initializeSidebar() {
+    try {
+        const currentWindow = await browser.windows.getCurrent();
+        sidebarWindowId = currentWindow.id;
+
+        pins.forEach(renderPin);
+    } catch (error) {
+        console.error("Failed to initialize sidebar:", error);
+    }
+}
 
 function savePins() {
     localStorage.setItem("pins", JSON.stringify(pins));
@@ -91,10 +125,25 @@ function renderPin(pin) {
     restoreTabConnection();
 
     function handleTabActivated(activeInfo) {
+        if (activeInfo.windowId !== sidebarWindowId) {
+            return;
+        }
+
         updateHighlight(activeInfo.tabId);
     }
 
     browser.tabs.onActivated.addListener(handleTabActivated);
+
+    function handleTabRemoved(tabId) {
+        if (tabId !== openedTabId) {
+            return;
+        }
+
+        openedTabId = null;
+        pinLink.classList.remove("active");
+    }
+
+    browser.tabs.onRemoved.addListener(handleTabRemoved);
 
     const pinItem = document.createElement("li");
     pinItem.className = "pin-row";
@@ -114,7 +163,10 @@ function renderPin(pin) {
 
         pins.splice(index, 1);
         savePins();
+
         browser.tabs.onActivated.removeListener(handleTabActivated);
+        browser.tabs.onRemoved.removeListener(handleTabRemoved);
+
         pinItem.remove();
     });
     const renameButton = document.createElement("button");
@@ -153,7 +205,7 @@ pins.forEach((pin) => {
 
 savePins();
 
-pins.forEach(renderPin);
+initializeSidebar();
 
 addPinButton.addEventListener("click", () => {
     const pinName = prompt("Enter a name for your pin:");
