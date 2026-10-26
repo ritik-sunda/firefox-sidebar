@@ -70,6 +70,7 @@ function savePins() {
 
 function renderPin(pin) {
     let isOpening = false;
+    let connectionVersion = 0;
     let openedTabId = null;
     const pinLink = document.createElement("a");
     pinLink.textContent = pin.name;
@@ -85,6 +86,7 @@ function renderPin(pin) {
         }
 
         isOpening = true;
+        connectionVersion += 1;
 
         try {
             const tabs = await browser.tabs.query({
@@ -132,10 +134,15 @@ function renderPin(pin) {
     }
 
     async function restoreTabConnection() {
+        const versionAtStart = connectionVersion;
         try {
             const tabs = await browser.tabs.query({
                 currentWindow: true
             });
+
+            if (versionAtStart !== connectionVersion) {
+                return;
+            }
 
             const matchingTab = tabs.find((tab) => {
                 return tab.url === pin.url;
@@ -152,11 +159,12 @@ function renderPin(pin) {
     restoreTabConnection();
 
     function handleTabActivated(activeInfo) {
-        if (activeInfo.windowId !== sidebarWindowId) {
-            return;
-        }
+    if (activeInfo.windowId !== sidebarWindowId) {
+        return;
+    }
 
-        updateHighlight(activeInfo.tabId);
+    connectionVersion += 1;
+    updateHighlight(activeInfo.tabId);
     }
 
     browser.tabs.onActivated.addListener(handleTabActivated);
