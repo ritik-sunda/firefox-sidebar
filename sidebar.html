@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>My Sidebar</title>
-    <link rel="stylesheet" href="sidebar.css">
-    <script src="sidebar.js" defer></script>
-  </head>
 
-  <body>
-    <aside class="sidebar">
-  <h1>My Sidebar</h1>
+<head>
+  <meta charset="UTF-8">
+  <title>My Sidebar</title>
+  <link rel="stylesheet" href="sidebar.css">
+  <script src="sidebar.js" defer></script>
+</head>
 
-  <div id="groups-container"></div>
+<body>
+  <aside class="sidebar">
+    <h1>My Sidebar</h1>
 
-  <button class="add-pin" type="button">New pin</button>
-</aside>
-  </body>
+    <div id="groups-container"></div>
+    <label for="pin-group">Group for new pins</label>
+
+    <select id="pin-group"></select>
+    <button class="add-pin" type="button">New pin</button>
+  </aside>
+</body>
+
 </html>

@@ -1,4 +1,5 @@
 const addPinButton = document.querySelector(".add-pin");
+const pinGroupSelect = document.querySelector("#pin-group");
 const groups = [
     { id: "coding", name: "Coding" },
     { id: "learning", name: "Learning" },
@@ -87,6 +88,15 @@ async function initializeSidebar() {
         const currentWindow = await browser.windows.getCurrent();
         sidebarWindowId = currentWindow.id;
 
+        groups.forEach((group) => {
+            const option = document.createElement("option");
+            option.value = group.id;
+            option.textContent = group.name;
+
+            pinGroupSelect.append(option);
+        });
+
+        pinGroupSelect.value = "college";
         groups.forEach(renderGroup);
         pins.forEach(renderPin);
     } catch (error) {
@@ -317,7 +327,7 @@ function renderPin(pin) {
 
     pinItem.append(pinLink, closeButton, actions);
     const groupList = document.getElementById("pins-" + pin.groupId);
-groupList.append(pinItem);
+    groupList.append(pinItem);
 }
 
 pins.forEach((pin) => {
@@ -388,7 +398,7 @@ addPinButton.addEventListener("click", () => {
         id: crypto.randomUUID(),
         name: trimmedName,
         url: finalUrl,
-        groupId: "college"
+        groupId: pinGroupSelect.value
     };
 
     pins.push(pin);
