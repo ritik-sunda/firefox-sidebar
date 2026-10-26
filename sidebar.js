@@ -6,6 +6,11 @@ const customThemeControls =
 const savedTheme = localStorage.getItem("theme");
 const customBackground =
     document.querySelector("#custom-background");
+const customGradientEnabled =
+    document.querySelector("#custom-gradient-enabled");
+
+const customGlow =
+    document.querySelector("#custom-glow");
 const savedBackground = localStorage.getItem("custom-background");
 
 if (savedBackground !== null) {
@@ -70,13 +75,48 @@ function applyTheme(theme) {
             "--sidebar-background",
             customBackground.value
         );
+        const gradient = customGradientEnabled.checked
+            ? "radial-gradient(circle at 90% 10%, " +
+            customGlow.value + "44, transparent 65%)"
+            : "none";
+
+        document.documentElement.style.setProperty(
+            "--sidebar-gradient",
+            gradient
+        );
     } else {
         document.documentElement.style.removeProperty(
             "--sidebar-background"
         );
+        document.documentElement.style.removeProperty(
+            "--sidebar-gradient"
+        );
     }
 
     customThemeControls.hidden = theme !== "custom";
+}
+
+customGradientEnabled.addEventListener("change", () => {
+    localStorage.setItem(
+        "custom-gradient-enabled",
+        String(customGradientEnabled.checked)
+    );
+
+    applyTheme(themeSelect.value);
+});
+
+customGlow.addEventListener("input", () => {
+    localStorage.setItem("custom-glow", customGlow.value);
+    applyTheme(themeSelect.value);
+});
+
+customGradientEnabled.checked =
+    localStorage.getItem("custom-gradient-enabled") === "true";
+
+const savedGlow = localStorage.getItem("custom-glow");
+
+if (savedGlow !== null) {
+    customGlow.value = savedGlow;
 }
 
 const initialTheme =
