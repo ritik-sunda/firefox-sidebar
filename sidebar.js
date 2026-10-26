@@ -73,7 +73,14 @@ function renderGroup(group) {
 
     const disclosure = document.createElement("details");
     disclosure.className = "pin-group";
-    disclosure.open = true;
+    const savedOpen = localStorage.getItem("group-open-" + group.id);
+    disclosure.open = savedOpen !== "false";
+    disclosure.addEventListener("toggle", () => {
+        localStorage.setItem(
+            "group-open-" + group.id,
+            JSON.stringify(disclosure.open)
+        );
+    });
 
     const summary = document.createElement("summary");
 
