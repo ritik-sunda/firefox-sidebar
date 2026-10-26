@@ -255,3 +255,29 @@ section {
 .pin-options>summary::marker {
   content: "";
 }
+
+select {
+  max-width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--sidebar-background);
+  color: var(--text-color);
+  font-family: inherit;
+}
+
+select:focus-visible {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+.theme-settings {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+#custom-theme-controls:not([hidden]) {
+  display: grid;
+  gap: 8px;
+}
