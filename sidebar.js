@@ -1,6 +1,16 @@
 const addPinButton = document.querySelector(".add-pin");
 const pinList = document.querySelector("#pin-list");
 
+document.addEventListener("click", (event) => {
+    const openPanels = document.querySelectorAll(".pin-options[open]");
+
+    openPanels.forEach((panel) => {
+        if (!panel.contains(event.target)) {
+            panel.open = false;
+        }
+    });
+});
+
 function isWebUrl(value) {
     try {
         const url = new URL(value);
@@ -211,6 +221,7 @@ function renderPin(pin) {
         browser.tabs.onRemoved.removeListener(handleTabRemoved);
 
         pinItem.remove();
+        addPinButton.focus();
     });
     const renameButton = document.createElement("button");
     renameButton.textContent = "Rename";
