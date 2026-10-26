@@ -1,12 +1,28 @@
 const addPinButton = document.querySelector(".add-pin");
 const pinList = document.querySelector("#pin-list");
 
+function isWebUrl(value) {
+    try {
+        const url = new URL(value);
+
+        return (
+            url.protocol === "https:" ||
+            url.protocol === "http:"
+        );
+    } catch {
+        return false;
+    }
+}
+
 function isValidPin(pin) {
     return (
         pin !== null &&
         typeof pin === "object" &&
         typeof pin.name === "string" &&
-        typeof pin.url === "string"
+        typeof pin.url === "string" &&
+        pin.name.trim() !== "" &&
+        pin.url.trim() !== "" &&
+        isWebUrl(pin.url)
     );
 }
 
@@ -24,7 +40,7 @@ function loadPins() {
             throw new Error("Saved pins must be an array.");
         }
         if (!parsedPins.every(isValidPin)) {
-        throw new Error("Saved data contains an invalid pin.");
+            throw new Error("Saved data contains an invalid pin.");
         }
         return parsedPins;
     } catch (error) {
@@ -256,6 +272,11 @@ addPinButton.addEventListener("click", () => {
     }
 
     try {
+        if (!isWebUrl(finalUrl)) {
+            alert("Please enter a valid HTTP or HTTPS URL.");
+            return;
+        }
+
         const parsedUrl = new URL(finalUrl);
         finalUrl = parsedUrl.href;
     } catch {
