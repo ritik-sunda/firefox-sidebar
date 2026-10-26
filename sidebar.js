@@ -275,6 +275,10 @@ function renderPin(pin) {
         pin.name = trimmedName;
         pinLink.textContent = pin.name;
         pinLink.title = pin.name;
+        moveSelect.setAttribute(
+            "aria-label",
+            "Move " + pin.name + " to group"
+        );
         savePins();
         actions.open = false;
         summary.focus();
@@ -322,7 +326,34 @@ function renderPin(pin) {
         }
     });
 
-    actionsPanel.append(renameButton, removeButton);
+    const moveSelect = document.createElement("select");
+    moveSelect.setAttribute("aria-label", "Move " + pin.name + " to group");
+
+    groups.forEach((group) => {
+        const option = document.createElement("option");
+        option.value = group.id;
+        option.textContent = group.name;
+
+        moveSelect.append(option);
+    });
+
+    moveSelect.value = pin.groupId;
+
+    moveSelect.addEventListener("change", () => {
+        const destinationId = moveSelect.value;
+        const destinationList =
+            document.getElementById("pins-" + destinationId);
+
+        pin.groupId = destinationId;
+        savePins();
+
+        destinationList.append(pinItem);
+
+        actions.open = false;
+        summary.focus();
+    });
+
+    actionsPanel.append(moveSelect, renameButton, removeButton);
     actions.append(summary, actionsPanel);
 
     pinItem.append(pinLink, closeButton, actions);
