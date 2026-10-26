@@ -1,16 +1,56 @@
 const addPinButton = document.querySelector(".add-pin");
 const pinGroupSelect = document.querySelector("#pin-group");
 const themeSelect = document.querySelector("#theme-select");
+const customThemeControls =
+    document.querySelector("#custom-theme-controls");
 const savedTheme = localStorage.getItem("theme");
-const initialTheme = savedTheme === "ocean" ? "ocean" : "default";
+const customBackground =
+    document.querySelector("#custom-background");
+const savedBackground = localStorage.getItem("custom-background");
 
-document.documentElement.dataset.theme = initialTheme;
+if (savedBackground !== null) {
+    customBackground.value = savedBackground;
+}
+
+customBackground.addEventListener("input", () => {
+    localStorage.setItem(
+        "custom-background",
+        customBackground.value
+    );
+
+    applyTheme(themeSelect.value);
+});
+
+function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+
+    if (theme === "custom") {
+        document.documentElement.style.setProperty(
+            "--sidebar-background",
+            customBackground.value
+        );
+    } else {
+        document.documentElement.style.removeProperty(
+            "--sidebar-background"
+        );
+    }
+
+    customThemeControls.hidden = theme !== "custom";
+}
+
+const initialTheme =
+    savedTheme === "ocean" || savedTheme === "custom"
+        ? savedTheme
+        : "default";
+
+applyTheme(initialTheme);
 themeSelect.value = initialTheme;
+customThemeControls.hidden = initialTheme !== "custom";
 
 themeSelect.addEventListener("change", () => {
     const selectedTheme = themeSelect.value;
 
-    document.documentElement.dataset.theme = selectedTheme;
+    applyTheme(selectedTheme);
     localStorage.setItem("theme", selectedTheme);
 });
 const groups = [
