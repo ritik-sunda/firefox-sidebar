@@ -363,6 +363,9 @@ function renderPin(pin) {
         pin.groupId = destinationId;
         savePins();
 
+        const destinationGroup = destinationList.closest(".pin-group");
+        destinationGroup.open = true;
+
         destinationList.append(pinItem);
 
         actions.open = false;
@@ -451,4 +454,11 @@ addPinButton.addEventListener("click", () => {
     pins.push(pin);
     savePins();
     renderPin(pin);
+    const destinationList =
+        document.getElementById("pins-" + pin.groupId);
+
+    const destinationGroup =
+        destinationList.closest(".pin-group");
+
+    destinationGroup.open = true;
 });
