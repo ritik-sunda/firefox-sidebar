@@ -1,4 +1,5 @@
 :root {
+  --sidebar-gradient: none;
   --page-background: #171923;
   --sidebar-background: #202331;
   --text-color: #f3f4f6;
@@ -18,6 +19,22 @@
   --muted-text: #a9bfd3;
   --border-color: #36536d;
   --focus-color: #7dd3fc;
+ --sidebar-gradient:
+  radial-gradient(
+    circle at 90% 10%,
+    #6d28d955,
+    transparent 55%
+  ),
+  radial-gradient(
+    circle at 10% 90%,
+    #14b8a644,
+    transparent 60%
+  ),
+  linear-gradient(
+    160deg,
+    #102238,
+    #164e63
+  );
 }
 
 :root[data-theme="custom"] {
@@ -84,6 +101,7 @@ section {
   box-sizing: border-box;
   min-height: 100vh;
   background-color: var(--sidebar-background);
+  background-image: var(--sidebar-gradient);
 }
 
 .sidebar h1 {
@@ -280,4 +298,24 @@ select:focus-visible {
 #custom-theme-controls:not([hidden]) {
   display: grid;
   gap: 8px;
+}
+
+.appearance-panel {
+  margin-bottom: 20px;
+}
+
+.appearance-panel > summary {
+  padding: 8px 0;
+  color: var(--muted-text);
+  cursor: pointer;
+}
+
+.appearance-panel > summary:focus-visible {
+  outline: 2px solid var(--focus-color);
+  outline-offset: 2px;
+}
+
+.appearance-panel .theme-settings {
+  margin-top: 8px;
+  margin-bottom: 0;
 }

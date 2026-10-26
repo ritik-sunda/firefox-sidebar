@@ -11,20 +11,25 @@
 <body>
   <aside class="sidebar">
     <h1>My Sidebar</h1>
-    <div class="theme-settings">
-      <label for="theme-select">Theme</label>
 
-      <select id="theme-select">
-        <option value="default">Default</option>
-        <option value="ocean">Ocean</option>
-        <option value="custom">Custom</option>
-      </select>
+    <details class="appearance-panel">
+      <summary>Appearance</summary>
 
-      <div id="custom-theme-controls" hidden>
-        <label for="custom-background">Sidebar background</label>
-        <input id="custom-background" type="color" value="#202331">
+      <div class="theme-settings">
+        <label for="theme-select">Theme</label>
+
+        <select id="theme-select">
+          <option value="default">Default</option>
+          <option value="ocean">Ocean</option>
+          <option value="custom">Custom</option>
+        </select>
+
+        <div id="custom-theme-controls" hidden>
+          <label for="custom-background">Sidebar background</label>
+          <input id="custom-background" type="color" value="#202331">
+        </div>
       </div>
-    </div>
+    </details>
 
     <div id="groups-container"></div>
     <label for="pin-group">Group for new pins</label>
