@@ -189,7 +189,7 @@ function renderPin(pin) {
     });
 
     function updateHighlight(activeTabId) {
-        pinLink.classList.toggle(
+        pinItem.classList.toggle(
             "active",
             activeTabId === openedTabId
         );
@@ -239,7 +239,7 @@ function renderPin(pin) {
 
         openedTabId = null;
         updateCloseButton();
-        pinLink.classList.remove("active");
+        pinItem.classList.remove("active");
     }
 
     browser.tabs.onRemoved.addListener(handleTabRemoved);
@@ -301,9 +301,11 @@ function renderPin(pin) {
     });
 
     const closeButton = document.createElement("button");
-    closeButton.textContent = "Close tab";
+    closeButton.textContent = "×";
+    closeButton.title = "Close tab";
+    closeButton.setAttribute("aria-label", "Close tab");
     closeButton.type = "button";
-    closeButton.className = "pin-action";
+    closeButton.className = "pin-action close-tab";
     closeButton.disabled = openedTabId === null;
 
     closeButton.addEventListener("click", async () => {
@@ -323,7 +325,9 @@ function renderPin(pin) {
     actions.className = "pin-options";
 
     const summary = document.createElement("summary");
-    summary.textContent = "More";
+    summary.textContent = "⋯";
+    summary.title = "Pin options";
+    summary.setAttribute("aria-label", "Pin options");
 
     const actionsPanel = document.createElement("div");
     actionsPanel.className = "pin-options-panel";

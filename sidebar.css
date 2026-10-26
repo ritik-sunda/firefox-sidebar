@@ -35,14 +35,29 @@ section {
     transition: background-color 0.2s, color 0.2s;
 }
 .sidebar {
-  width: 260px;
+  width: 100%;
   padding: 16px;
   background-color: #202331;
   border-radius: 16px;
   box-sizing: border-box;
   min-height: 100vh;
 }
-.active {
+.sidebar h1 {
+  margin: 0 0 20px;
+  font-size: 20px;
+  font-weight: 600;
+}
+.pin-row {
+  border-radius: 10px;
+  margin-bottom: 4px;
+  transition: background-color 0.2s;
+}
+
+.pin-row:hover {
+  background-color: #292d3e;
+}
+
+.pin-row.active {
   background-color: #35394f;
 }
 .add-pin {
@@ -157,4 +172,26 @@ section {
 .pin-group > summary:focus-visible {
     outline: 2px solid #a78bfa;
     outline-offset: 3px;
+}
+.close-tab {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 20px;
+  line-height: 1;
+}
+.pin-options > summary {
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  font-size: 20px;
+}
+
+.pin-options > summary::marker {
+  content: "";
 }
