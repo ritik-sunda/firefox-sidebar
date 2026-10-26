@@ -21,10 +21,51 @@ customBackground.addEventListener("input", () => {
     applyTheme(themeSelect.value);
 });
 
+function getRgb(hex) {
+    return {
+        red: parseInt(hex.slice(1, 3), 16),
+        green: parseInt(hex.slice(3, 5), 16),
+        blue: parseInt(hex.slice(5, 7), 16)
+    };
+}
+
+function getLuminance(hex) {
+    const rgb = getRgb(hex);
+
+    function linearize(channel) {
+        const value = channel / 255;
+
+        return value <= 0.04045
+            ? value / 12.92
+            : ((value + 0.055) / 1.055) ** 2.4;
+    }
+
+    return (
+        0.2126 * linearize(rgb.red) +
+        0.7152 * linearize(rgb.green) +
+        0.0722 * linearize(rgb.blue)
+    );
+}
+
+function getTextColor(background) {
+    const luminance = getLuminance(background);
+
+    const blackContrast = (luminance + 0.05) / 0.05;
+    const whiteContrast = 1.05 / (luminance + 0.05);
+
+    return blackContrast >= whiteContrast
+        ? "#000000"
+        : "#ffffff";
+}
+
 function applyTheme(theme) {
     document.documentElement.dataset.theme = theme;
 
     if (theme === "custom") {
+        const textColor = getTextColor(customBackground.value);
+
+        document.documentElement.dataset.tone =
+            textColor === "#000000" ? "light" : "dark";
         document.documentElement.style.setProperty(
             "--sidebar-background",
             customBackground.value
@@ -45,7 +86,6 @@ const initialTheme =
 
 applyTheme(initialTheme);
 themeSelect.value = initialTheme;
-customThemeControls.hidden = initialTheme !== "custom";
 
 themeSelect.addEventListener("change", () => {
     const selectedTheme = themeSelect.value;

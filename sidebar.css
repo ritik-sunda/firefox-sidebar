@@ -20,6 +20,20 @@
   --focus-color: #7dd3fc;
 }
 
+:root[data-theme="custom"] {
+  --page-background: var(--sidebar-background);
+  --text-color: #ffffff;
+  --muted-text: var(--text-color);
+  --focus-color: var(--text-color);
+}
+
+:root[data-theme="custom"][data-tone="light"] {
+  --text-color: #000000;
+  --hover-background: #e2e8f0;
+  --active-background: #cbd5e1;
+  --border-color: #64748b;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
