@@ -79,7 +79,7 @@ function renderPin(pin) {
     pinLink.className = "pin";
 
     function updateCloseButton() {
-    closeButton.disabled = openedTabId === null;
+        closeButton.disabled = openedTabId === null;
     }
 
     pinLink.addEventListener("click", async (event) => {
@@ -166,12 +166,12 @@ function renderPin(pin) {
     restoreTabConnection();
 
     function handleTabActivated(activeInfo) {
-    if (activeInfo.windowId !== sidebarWindowId) {
-        return;
-    }
+        if (activeInfo.windowId !== sidebarWindowId) {
+            return;
+        }
 
-    connectionVersion += 1;
-    updateHighlight(activeInfo.tabId);
+        connectionVersion += 1;
+        updateHighlight(activeInfo.tabId);
     }
 
     browser.tabs.onActivated.addListener(handleTabActivated);
@@ -235,28 +235,42 @@ function renderPin(pin) {
         pinLink.textContent = pin.name;
         pinLink.title = pin.name;
         savePins();
+        actions.open = false;
+        summary.focus();
     });
 
     const closeButton = document.createElement("button");
-closeButton.textContent = "Close tab";
-closeButton.type = "button";
-closeButton.className = "pin-action";
-closeButton.disabled = openedTabId === null;
+    closeButton.textContent = "Close tab";
+    closeButton.type = "button";
+    closeButton.className = "pin-action";
+    closeButton.disabled = openedTabId === null;
 
-closeButton.addEventListener("click", async () => {
-    if (openedTabId === null) {
-        return;
-    }
+    closeButton.addEventListener("click", async () => {
+        if (openedTabId === null) {
+            return;
+        }
 
-    try {
-        await browser.tabs.remove(openedTabId);
-    } catch (error) {
-        console.error("Could not close tab:", error);
-        alert("Could not close this tab. Please try again.");
-    }
-});
+        try {
+            await browser.tabs.remove(openedTabId);
+        } catch (error) {
+            console.error("Could not close tab:", error);
+            alert("Could not close this tab. Please try again.");
+        }
+    });
 
-    pinItem.append(pinLink, removeButton, renameButton, closeButton);
+    const actions = document.createElement("details");
+    actions.className = "pin-options";
+
+    const summary = document.createElement("summary");
+    summary.textContent = "More";
+
+    const actionsPanel = document.createElement("div");
+    actionsPanel.className = "pin-options-panel";
+
+    actionsPanel.append(renameButton, removeButton);
+    actions.append(summary, actionsPanel);
+
+    pinItem.append(pinLink, closeButton, actions);
     pinList.append(pinItem);
 }
 

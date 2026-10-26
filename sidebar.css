@@ -86,11 +86,11 @@ section {
   font-family: inherit;
   cursor: pointer;
 }
-.pin-action:hover {
+.pin-action:hover:not(:disabled) {
   background-color: #35394f;
   color: #f3f4f6;
 }
-.remove-pin:hover {
+.remove-pin:hover:not(:disabled) {
   background-color: #4a2530;
   color: #fda4af;
 }
@@ -101,4 +101,44 @@ section {
 .pin-action:disabled {
     opacity: 0.4;
     cursor: default;
+}
+.pin-options {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.pin-options summary {
+  padding: 6px 8px;
+  border-radius: 6px;
+  color: #a1a1aa;
+  cursor: pointer;
+}
+
+.pin-options summary:hover {
+  background-color: #35394f;
+  color: #f3f4f6;
+}
+
+.pin-options summary:focus-visible {
+  outline: 2px solid #a78bfa;
+  outline-offset: 2px;
+}
+
+.pin-options-panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1;
+  min-width: 120px;
+  padding: 6px;
+  border: 1px solid #44485e;
+  border-radius: 8px;
+  background-color: #202331;
+  box-shadow: 0 8px 20px #00000040;
+}
+
+.pin-options-panel .pin-action {
+  display: block;
+  width: 100%;
+  text-align: left;
 }
