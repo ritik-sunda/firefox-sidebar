@@ -142,3 +142,19 @@ section {
   width: 100%;
   text-align: left;
 }
+.pin-group > summary {
+    cursor: pointer;
+}
+
+.pin-group > summary .group-title {
+    display: inline;
+}
+
+.pin-group > summary {
+    margin-bottom: 8px;
+}
+
+.pin-group > summary:focus-visible {
+    outline: 2px solid #a78bfa;
+    outline-offset: 3px;
+}

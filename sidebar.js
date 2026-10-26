@@ -71,14 +71,23 @@ const pins = loadPins();
 function renderGroup(group) {
     const section = document.createElement("section");
 
+    const disclosure = document.createElement("details");
+    disclosure.className = "pin-group";
+    disclosure.open = true;
+
+    const summary = document.createElement("summary");
+
     const heading = document.createElement("h2");
     heading.className = "group-title";
     heading.textContent = group.name;
 
+    summary.append(heading);
+
     const list = document.createElement("ul");
     list.id = "pins-" + group.id;
 
-    section.append(heading, list);
+    disclosure.append(summary, list);
+    section.append(disclosure);
     groupsContainer.append(section);
 }
 let sidebarWindowId = null;
